@@ -182,6 +182,9 @@ def putset(b: dict, u=Depends(user)):
     c.commit(); return {"ok": 1}
 
 _b = os.path.join(os.path.dirname(__file__), "..")
-FE = os.path.join(_b, "frontend-react", "dist")  # React build (preferred); falls back to the plain-JS UI
-if not os.path.isdir(FE): FE = os.path.join(_b, "frontend")
-app.mount("/", StaticFiles(directory=FE, html=True), name="ui")
+FE = os.path.join(_b, "frontend-react", "dist")
+
+# Serve frontend only when the frontend files are available.
+# On Vercel, the frontend is served separately.
+if os.path.isdir(FE):
+    app.mount("/", StaticFiles(directory=FE, html=True), name="ui")
