@@ -5,7 +5,7 @@ from fastapi import FastAPI, UploadFile, File, Header, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 load_dotenv(); E = os.getenv
-DB = E("DB_PATH", "smartrag.db")
+DB = E("DB_PATH", "/tmp/smartrag.db" if os.getenv("VERCEL") else "smartrag.db")
 def db():
     c = sqlite3.connect(DB); c.row_factory = sqlite3.Row; return c
 with db() as c:
